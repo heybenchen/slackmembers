@@ -17,7 +17,7 @@ import retrofit2.GsonConverterFactory;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class ProfileActivity extends AppCompatActivity {
+public class MembersActivity extends AppCompatActivity {
 
     SlackService mSlackService;
     MembersAdapter mAdapter;
@@ -27,7 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_members);
         ButterKnife.bind(this);
 
         mSlackService = initSlackService();
@@ -58,7 +58,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(final Throwable t) {
-                Toast.makeText(ProfileActivity.this, R.string.error_network, Toast.LENGTH_SHORT)
+                Toast.makeText(MembersActivity.this, R.string.error_network, Toast.LENGTH_SHORT)
                         .show();
             }
         });
