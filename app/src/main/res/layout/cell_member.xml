@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/cell_member_avatar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/cell_member_avatar_size"
+        android:layout_height="@dimen/cell_member_avatar_size"
         android:layout_gravity="center_vertical"
         android:scaleType="centerCrop"
         tools:src="@android:drawable/ic_menu_gallery"/>
@@ -28,8 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:text="Username"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            tools:text="Username"/>
 
         <TextView
             android:id="@+id/cell_member_real_name"
@@ -37,8 +37,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:text="Real Name"
-            android:textAppearance="?android:attr/textAppearanceSmall"/>
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            tools:text="Real Name"/>
 
     </LinearLayout>
 
