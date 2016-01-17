@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">SlackProfile</string>
+    <string name="app_name">Slack Members</string>
+    <string name="error_network">Network Error. Couldn\'t connect to Slack.</string>
 </resources>

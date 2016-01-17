@@ -2,11 +2,11 @@ package bschen.slackprofile.models;
 
 public class Profile {
 
-    private String real_name;
+    private String image_48;
     private String image_192;
 
-    public String getRealName() {
-        return real_name;
+    public String getImage48() {
+        return image_48;
     }
 
     public String getImage192() {
