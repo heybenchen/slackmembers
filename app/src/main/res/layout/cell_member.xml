@@ -14,6 +14,7 @@
         android:layout_height="@dimen/cell_member_avatar_size"
         android:layout_gravity="center_vertical"
         android:scaleType="centerCrop"
+        android:transitionName="@string/transition_avatar"
         tools:src="@android:drawable/ic_menu_gallery"/>
 
     <LinearLayout
@@ -29,6 +30,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:transitionName="@string/transition_user_name"
             tools:text="Username"/>
 
         <TextView
@@ -38,6 +40,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:transitionName="@string/transition_real_name"
             tools:text="Real Name"/>
 
     </LinearLayout>

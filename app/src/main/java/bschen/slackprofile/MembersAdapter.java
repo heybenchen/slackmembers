@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 
 public class MembersAdapter extends ArrayAdapter<Member> {
 
-    private static class ViewHolder {
+    public static class ViewHolder {
         TextView userName;
         TextView realName;
         ImageView avatar;
@@ -56,4 +56,6 @@ public class MembersAdapter extends ArrayAdapter<Member> {
 
         return convertView;
     }
+
+
 }

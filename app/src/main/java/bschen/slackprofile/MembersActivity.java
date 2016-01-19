@@ -1,7 +1,13 @@
 package bschen.slackprofile;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,7 +39,18 @@ public class MembersActivity extends AppCompatActivity {
         mSlackService = initSlackService();
         mAdapter = new MembersAdapter(this, new ArrayList<Member>());
         mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> parent, final View view,
+                    final int position, final long id) {
+                launchProfileActivity(mAdapter.getItem(position), view);
+            }
+        });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         loadData();
     }
 
@@ -62,6 +79,30 @@ public class MembersActivity extends AppCompatActivity {
                         .show();
             }
         });
+    }
 
+    private void launchProfileActivity(final Member member, final View listItemView) {
+        final Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra(ProfileActivity.EXTRA_MEMBER, member);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            startActivity(intent);
+        } else {
+            final Object tag = listItemView.getTag();
+            if (tag instanceof MembersAdapter.ViewHolder) {
+                final MembersAdapter.ViewHolder viewHolder = (MembersAdapter.ViewHolder) tag;
+                final View avatar = viewHolder.avatar;
+                final View userName = viewHolder.userName;
+                final View realName = viewHolder.realName;
+
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this,
+                        Pair.create(avatar, avatar.getTransitionName()),
+                        Pair.create(userName, userName.getTransitionName()),
+                        Pair.create(realName, realName.getTransitionName()));
+
+                startActivity(intent, options.toBundle());
+            }
+        }
     }
 }

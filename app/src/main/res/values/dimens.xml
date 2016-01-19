@@ -4,4 +4,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="cell_member_avatar_size">48dp</dimen>
+    <dimen name="profile_avatar_size">128dp</dimen>
 </resources>

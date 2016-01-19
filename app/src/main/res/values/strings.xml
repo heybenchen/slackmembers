@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Slack Members</string>
     <string name="error_network">Network Error. Couldn\'t connect to Slack.</string>
+    <string name="transition_avatar">avatar</string>
+    <string name="transition_user_name">user_name</string>
+    <string name="transition_real_name">real_name</string>
 </resources>
