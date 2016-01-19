@@ -3,6 +3,8 @@ Displays a list of members in a slack group. Clicking on a member shows more det
 
 The latest list of members are saved to internal storage and retrieved in case the app is not able to fetch a new list of members.
 
+<img src="/screenshot.png" width="300px"/>
+
 ### libraries
 **'com.android.support:support-annotations:23.1.1'**   
  For helper annotations like @Non-Null, @Nullable
