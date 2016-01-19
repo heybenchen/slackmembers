@@ -3,6 +3,7 @@ package bschen.slackprofile;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
@@ -11,10 +12,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import bschen.slackprofile.models.Member;
 import bschen.slackprofile.models.MembersResponse;
+import bschen.slackprofile.utils.DataUtils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -24,6 +28,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MembersActivity extends AppCompatActivity {
+
+    private static final String KEY_MEMBERS = "KEY_MEMBERS";
 
     SlackService mSlackService;
     MembersAdapter mAdapter;
@@ -37,6 +43,16 @@ public class MembersActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         mSlackService = initSlackService();
+        initViews();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadData();
+    }
+
+    private void initViews() {
         mAdapter = new MembersAdapter(this, new ArrayList<Member>());
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -46,12 +62,6 @@ public class MembersActivity extends AppCompatActivity {
                 launchProfileActivity(mAdapter.getItem(position), view);
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadData();
     }
 
     private SlackService initSlackService() {
@@ -69,12 +79,16 @@ public class MembersActivity extends AppCompatActivity {
             public void onResponse(final Response<MembersResponse> response) {
                 final MembersResponse memberResponse = response.body();
                 if (response.body() != null && memberResponse.isOk()) {
-                    mAdapter.replaceMembers(memberResponse.getMembers());
+                    final List<Member> members = memberResponse.getMembers();
+                    saveMembersToCache(members);
+                    mAdapter.replaceMembers(members);
                 }
             }
 
             @Override
             public void onFailure(final Throwable t) {
+                // If no response was received, load the most recently cached members list
+                mAdapter.replaceMembers(loadMembersFromCache());
                 Toast.makeText(MembersActivity.this, R.string.error_network, Toast.LENGTH_SHORT)
                         .show();
             }
@@ -88,6 +102,10 @@ public class MembersActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             startActivity(intent);
         } else {
+            // Trying out the Android Scene Transition API. Looks like it's still in development
+            // and has some kinks in it.
+            // For example, the nav and status bars flash while transitioning. There's a
+            // workaround, but it's messy so I didn't include it.
             final Object tag = listItemView.getTag();
             if (tag instanceof MembersAdapter.ViewHolder) {
                 final MembersAdapter.ViewHolder viewHolder = (MembersAdapter.ViewHolder) tag;
@@ -104,5 +122,25 @@ public class MembersActivity extends AppCompatActivity {
                 startActivity(intent, options.toBundle());
             }
         }
+    }
+
+    private void saveMembersToCache(final List<Member> members) {
+        try {
+            DataUtils.writeObject(this, KEY_MEMBERS, members);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Nullable
+    @SuppressWarnings("unchecked")
+    private List<Member> loadMembersFromCache() {
+        List<Member> members = null;
+        try {
+            members = (List<Member>) DataUtils.readObject(this, KEY_MEMBERS);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return members;
     }
 }

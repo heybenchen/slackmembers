@@ -1,24 +1,28 @@
 package bschen.slackprofile.utils;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public final class DataUtils {
 
-    public static void cacheJson(final Context context, final String key, final String jsonString) {
-        final String appName = context.getApplicationInfo().name;
-        final SharedPreferences mPrefs =
-                context.getSharedPreferences(appName, Context.MODE_PRIVATE);
-        final SharedPreferences.Editor ed = mPrefs.edit();
-        ed.putString(key, jsonString);
-        ed.apply();
+    public static void writeObject(Context context, String key, Object object) throws IOException {
+        FileOutputStream fos = context.openFileOutput(key, Context.MODE_PRIVATE);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(object);
+        oos.close();
+        fos.close();
     }
 
-    public static String restoreJson(final Context context, final String key) {
-        final String appName = context.getApplicationInfo().name;
-        final SharedPreferences mPrefs =
-                context.getSharedPreferences(appName, Context.MODE_PRIVATE);
-        return mPrefs.getString(key, "");
+    public static Object readObject(Context context, String key) throws IOException,
+            ClassNotFoundException {
+        FileInputStream fis = context.openFileInput(key);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        return ois.readObject();
     }
 
 }
